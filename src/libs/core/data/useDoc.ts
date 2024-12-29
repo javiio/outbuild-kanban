@@ -2,10 +2,8 @@
 import { useState, useEffect } from 'react';
 import {
 	doc,
-  // setDoc,
   updateDoc,
   deleteDoc,
-	// arrayUnion,
 	onSnapshot,
 } from 'firebase/firestore';
 import { RealtimeAction, useRealtime, type Data, type ItemActions } from '@/core/data';
@@ -24,13 +22,23 @@ export const useDoc = <T extends Data>(
 	const [editors, setEditors] = useState<RealtimeAction[]>([]);
 	const [mover, setMover] = useState<RealtimeAction | null>();
 	const [isLoading, setIsLoading] = useState(false);
-	const { actionsMap, setViewing, setEditing, unsetEditing, setMoving, unsetMoving } = useRealtime();
+	const {
+		actionsMap,
+		viewItem,
+		unview,
+		startEditingItem,
+		finishEditing,
+		startMovingItem,
+		finishMoving
+	} = useRealtime();
 
 	useEffect(() => {
 		if (config?.realtime) {
 			const unsubscribe = onSnapshot(doc(db, path), (doc) => {
 				if (doc.exists()) {
 					setItem(doc.data() as T);
+				} else {
+					setItem(undefined);
 				}
 			});
 	
@@ -56,23 +64,15 @@ export const useDoc = <T extends Data>(
   }
 
 	const view = async () => {
-		await setViewing(collectionName, id);
-	};
-	
-	const startEditing = async (field: string) => {
-		await setEditing(collectionName, id, field);
+		await viewItem(collectionName, id);
 	};
 
-	const finishEditing = async () => {
-		await unsetEditing();
+	const startEditing = async (field: string) => {
+		await startEditingItem(collectionName, id, field);
 	};
 
 	const startMoving = async () => {
-		await setMoving(collectionName, id);
-	}
-
-	const finishMoving = async () => {
-		await unsetMoving();
+		await startMovingItem(collectionName, id);
 	}
 
 	return {
@@ -80,6 +80,7 @@ export const useDoc = <T extends Data>(
 		update,
 		remove,
 		view,
+		unview,
 		viewers,
 		editors,
 		mover,

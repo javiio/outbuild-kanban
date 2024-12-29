@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card } from '@/core/ui';
+import { useRightPanel } from '@/core/data';
+import { Card, Colors, Text } from '@/core/ui';
 import { useTask, useTasks, type Task } from '@/tasks';
 
 interface TaskCardProps {
@@ -9,21 +10,21 @@ interface TaskCardProps {
 
 export const TaskCard = ({ task, isDragging }: TaskCardProps) => {
   const taskActions = useTask(task);
-	const { selected, setSelected, get, currentProject } = useTasks();
+	const { get } = useTasks();
+	const { showPanel } = useRightPanel();
 	const item = get(task) as Task;
 
   return (
 		<Card
-			item={item}
+			item={get(task) as Task}
 			itemActions={taskActions}
-			isSelected={selected?.id === item.id}
-			onSelect={setSelected}
+			onSelect={() => showPanel('tasks', item)}
 			className="bg-gray-800"
-			color={currentProject?.color}
+			color={isDragging ? Colors.gray : 'yellow'}
 			isDragging={isDragging}
 		>
 			<div className="flex">
-				<span className="flex-1">{item.name}</span>
+				<Text className="flex-1">{item?.name}</Text>
 			</div>
 		</Card>
 	);

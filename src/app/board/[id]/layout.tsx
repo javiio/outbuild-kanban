@@ -5,5 +5,5 @@ export default function ProjectsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children
+  return children;
 }

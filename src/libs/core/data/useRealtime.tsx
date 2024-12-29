@@ -1,17 +1,19 @@
-'use client';
-import {
-	useEffect,
-	useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import { ActionType, now, type RealtimeItemTracking } from '@/core/data';
 import { useUsers, type User } from '@/users';
+import { useAuth } from '@/auth';
 
 export const useRealtime = () => {
 	const [actionsMap, setActionsMap] = useState<Record<string, RealtimeItemTracking>>({});
-	const { list: users, update, selected } = useUsers();
+  const { list: users, update } = useUsers();
+  const auth = useAuth();
+  const currentUser = auth.currentUser as User;
 
 	useEffect(() => {
-    const _actionsMap = users.reduce((map, { viewing, editing, moving }) => {
+    const _actionsMap = users.reduce((map, { viewing, editing, moving, isOnline }) => {
+      if (!isOnline) {
+        return map;
+      }
       if (viewing) {
         const itemKey = `${viewing.collectionName}/${viewing.itemId}`;
         if (!map[itemKey]) {
@@ -53,68 +55,68 @@ export const useRealtime = () => {
     setActionsMap(_actionsMap);
   }, [users]);
 
-  const setViewing = async (collectionName: string, itemId: string) => {
-    await update((selected as User).id, {
+  const viewItem = async (collectionName: string, itemId: string) => {
+    await update(currentUser.id, {
       viewing: {
         collectionName,
         itemId,
         action: ActionType.View,
-        userId: (selected as User).id,
+        userId: currentUser.id,
         startedAt: now(),
       },
     });
   };
 
-  const unsetViewing = async () => {
-    await update((selected as User).id, {
+  const unview = async () => {
+    await update(currentUser.id, {
       viewing: null,
     });
   }
 
-  const setEditing = async (collectionName: string, itemId: string, field: string) => {
-    await update((selected as User).id, {
+  const startEditingItem = async (collectionName: string, itemId: string, field: string) => {
+    await update(currentUser.id, {
       editing: {
         collectionName,
         itemId,
         field,
         action: ActionType.Edit,
-        userId: (selected as User).id,
+        userId: currentUser.id,
         startedAt: now(),
       },
     });
   };
   
-  const unsetEditing = async () => {
-    await update((selected as User).id, {
+  const finishEditing = async () => {
+    await update(currentUser.id, {
       editing: null,
     });
   };
 
-  const setMoving = async (collectionName: string, itemId: string) => {
-    await update((selected as User).id, {
+  const startMovingItem = async (collectionName: string, itemId: string) => {
+    await update(currentUser.id, {
       moving: {
         collectionName,
         itemId,
         action: ActionType.Move,
-        userId: (selected as User).id,
+        userId: currentUser.id,
         startedAt: now(),
       },
     });
   }
 
-  const unsetMoving = async () => {
-    await update((selected as User).id, {
+  const finishMoving = async () => {
+    await update(currentUser.id, {
       moving: null,
     });
   }
 
 	return {
 		actionsMap,
-    setViewing,
-    unsetViewing,
-    setEditing,
-    unsetEditing,
-    setMoving,
-    unsetMoving,
+    viewItem,
+    unview,
+    startEditingItem,
+    finishEditing,
+    startMovingItem,
+    finishMoving,
 	}
 };

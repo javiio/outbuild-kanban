@@ -47,8 +47,26 @@ Text.H3 = ({ className = '', children, ...props }: BaseTextProps) => {
   );
 };
 
+Text.P = ({ className = '', children, ...props }: BaseTextProps) => {
+  return (
+    <TextBase as="p" className={`text-md font-light ${className}`} {...props}>
+      {children}
+    </TextBase>
+  );
+};
+
+Text.Label = ({ className = '', children, ...props }: BaseTextProps) => {
+  return (
+    <TextBase as="label" className={`block font-medium mb-2 ${className}`} {...props}>
+      {children}
+    </TextBase>
+  );
+};
+
 
 Text.displayName = 'Text';
 Text.H1.displayName = 'Text.H1';
 Text.H2.displayName = 'Text.H2';
 Text.H3.displayName = 'Text.H3';
+Text.P.displayName = 'Text.P';
+Text.Label.displayName = 'Text.Label';

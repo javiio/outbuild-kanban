@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Modal, Button } from '@/core/ui';
+import { Input, Modal, Button, IconPicker, ColorPicker, randomIcon, randomColor, type IconName, type ColorName } from '@/core/ui';
 import { useProjects } from '@/projects';
 
 export interface NewProjectModalProps {
@@ -10,6 +10,8 @@ export interface NewProjectModalProps {
 export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
 	const [name, setName] = useState('');
 	const [key, setKey] = useState(0);
+	const [icon, setIcon] = useState<IconName>(randomIcon());
+	const [color, setColor] = useState<ColorName>(randomColor());
 	const [isLoading, setIsLoading] = useState(false);
 	const { add } = useProjects();
 
@@ -21,7 +23,7 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
 		setIsLoading(true);
     e.preventDefault();
 
-		add({ name });
+		add({ name, icon, color, lists: [] });
 		onClose();
 		setName('');
 		setIsLoading(false);
@@ -38,6 +40,11 @@ export const NewProjectModal = ({ isOpen, onClose }: NewProjectModalProps) => {
 					autoFocus
 					key={key} // Hack to re-render the input and focus it
 				/>
+
+				<div className="flex space-x-12 mt-4">
+					<IconPicker value={icon} onChange={setIcon} showLabel size="xl" />
+					<ColorPicker value={color} onChange={setColor} showLabel size="xl" />
+				</div>
 
 				<div className="flex flex-row-reverse justify-start space-x-4 space-x-reverse mt-6 text-white">
 					<Button type="submit" disabled={name === ''} isLoading={isLoading}>

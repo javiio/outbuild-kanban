@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Adaptation from MultipleContainers example from dnd-kit to implement the Outbuild Kanban board :)
  * https://github.com/clauderic/dnd-kit/blob/master/stories/2%20-%20Presets/Sortable/MultipleContainers.tsx
@@ -33,7 +35,6 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useRealtime } from '@/core/data';
 import {
-  useProject,
   useProjects,
   BoardListItem,
   BoardList,
@@ -42,7 +43,7 @@ import {
   import { useTasks, TaskCard } from '@/tasks';
 
 interface ProjectBoardProps {
-  project: Project
+  projectId: string
 };
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>
@@ -58,18 +59,26 @@ const dropAnimation: DropAnimation = {
   }),
 };
 
-export const ProjectBoard = ({ project }: ProjectBoardProps) => {
+export const ProjectBoard = ({ projectId }: ProjectBoardProps) => {
+  const { get, update: updateProject } = useProjects();
   const { list: tasks, update: updateTask } = useTasks();
+  const [project, setProject] = useState<Project>();
   const [items, setItems] = useState<Items>({});
   const [containers, setContainers] = useState<UniqueIdentifier[]>([]);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const lastOverId = useRef<UniqueIdentifier | null>(null);
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
   const recentlyMovedToNewContainer = useRef(false);
-  const { update: updateProject } = useProjects();
-  const { setMoving, unsetMoving } = useRealtime();
+  const { startMovingItem, finishMoving } = useRealtime();
 
   useEffect(() => {
+    setProject(get(projectId));
+  }, [projectId, get]);
+
+  useEffect(() => {
+    if (!project) {
+      return;
+    }
     const items = tasks.reduce((acc, task) => {
       if (!acc[task.listId]) {
         acc[task.listId] = [];
@@ -231,7 +240,7 @@ export const ProjectBoard = ({ project }: ProjectBoardProps) => {
 
         // Check if it is a task instead of a list
         if (!(active.id in items)) {
-          setMoving('tasks', active.id as string);
+          startMovingItem('tasks', active.id as string);
         }
       }}
       onDragOver={({ active, over }) => {
@@ -331,14 +340,14 @@ export const ProjectBoard = ({ project }: ProjectBoardProps) => {
           }
 
           await updateTask(active.id as string, { listId: overContainer as string });
-          unsetMoving();
+          finishMoving();
         }
 
         setActiveId(null);
       }}
       onDragCancel={onDragCancel}
     >
-      <div className="flex space-x-2 pl-4 overflow-x-auto h-[calc(100vh-6.1rem)] w-full">
+      <div className="flex space-x-2 px-4 overflow-x-auto h-[calc(100vh-6.1rem)] w-full">
         <SortableContext
           items={[...containers]}
           strategy={horizontalListSortingStrategy}
@@ -347,7 +356,7 @@ export const ProjectBoard = ({ project }: ProjectBoardProps) => {
             <DroppableContainer
               key={containerId}
               id={containerId}
-              project={project}
+              project={project as Project}
               items={items[containerId]}
             >
               <SortableContext items={items[containerId]} strategy={verticalListSortingStrategy}>

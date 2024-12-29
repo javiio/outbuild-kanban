@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useClickAway } from 'react-use';
-import { type Data, type ItemActions } from '@/core/data';
+import { useRightPanel, type Data, type ItemActions } from '@/core/data';
 import { Button, IconButton, Input, Icons, ActionsMenu, Text } from '@/core/ui';
 
 interface TitleFormProps<T extends Data> {
@@ -11,6 +11,7 @@ export const TitleForm = <T extends Data>({ itemActions }: TitleFormProps<T>) =>
   const { item, update, remove, startEditing, finishEditing, isLoading } = itemActions;
   const [name, setName] = useState(item?.name || '');
   const [isEditing, setIsEditing] = useState(false);
+  const { hidePanel } = useRightPanel();
   const formRef = useRef(null);
   useClickAway(formRef, () => handleFinishEditing());
 
@@ -47,7 +48,10 @@ export const TitleForm = <T extends Data>({ itemActions }: TitleFormProps<T>) =>
   }
 
   const handleOnRemove = async () => {
-    await remove();
+    if (remove) {
+      await remove();
+      hidePanel();
+    }
   }
 
   return (

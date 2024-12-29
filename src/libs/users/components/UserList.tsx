@@ -5,6 +5,13 @@ import { useUsers, UserCard } from '@/users';
 export const UserList = () => {
 	const { list } = useUsers();
 
+	const sortedUsers = list.sort((a, b) => {
+		if (a.isOnline === b.isOnline) {
+			return 0;
+		}
+  	return a.isOnline ? -1 : 1;
+	});
+
 	return (
 		<div className="p-4">
 			<div className="flex space-x-2 text-green-100">
@@ -14,7 +21,7 @@ export const UserList = () => {
 
 			<div className="h-[1px] w-20 bg-gradient-to-r from-green-100 opacity-70" />
 
-			{list.map((user) => (
+			{sortedUsers.map((user) => (
 				<UserCard key={user.id} user={user} />
 			))}
 		</div>

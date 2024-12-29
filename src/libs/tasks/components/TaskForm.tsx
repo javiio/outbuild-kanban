@@ -1,5 +1,5 @@
-import React from 'react';
-import { TitleForm, Textarea } from '@/core/ui';
+import React, { useEffect } from 'react';
+import { TitleForm, Textarea, Text } from '@/core/ui';
 import { useTask, type Task } from '@/tasks';
 
 interface TaskFormProps {
@@ -8,6 +8,23 @@ interface TaskFormProps {
 
 export const TaskForm = ({ task }: TaskFormProps) => {
 	const taskActions = useTask(task, { realtime: true });
+
+	useEffect(() => {
+		taskActions.view();
+		const unload = () => {
+			taskActions.unview();
+		};
+		return unload;
+	}, []);
+
+	if (!taskActions.item && !taskActions.isLoading) {
+		return (
+			<>
+				<Text.H2>ERROR</Text.H2>
+				<Text>Task not found. Maybe it was deleted by someone else.</Text>
+			</>
+		);
+	}
 
 	return (
 		<div className="flex flex-col space-y-6">

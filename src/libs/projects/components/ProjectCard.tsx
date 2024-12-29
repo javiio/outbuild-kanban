@@ -1,6 +1,7 @@
 import React from 'react';
+import { useRightPanel } from '@/core/data';
 import { Icon, Card, Text } from '@/core/ui';
-import { useProject, useProjects, type Project } from '@/projects';
+import { useProject, type Project } from '@/projects';
 
 interface ProjectProps {
 	project: Project;
@@ -8,16 +9,15 @@ interface ProjectProps {
 
 export const ProjectCard = ({ project }: ProjectProps) => {
 	const projectActions = useProject(project);
-	const { selected, setSelected } = useProjects();
+	const { showPanel } = useRightPanel();
 
 	return (
 		<Card
 			item={project}
 			itemActions={projectActions}
-			isSelected={selected?.id === project.id}
-			onSelect={setSelected}
+			onSelect={() => showPanel('projects', project)}
 			color={project.color}
-			className="p-4 max-w-md min-w-96 mt-2"
+			className="p-4 max-w-md min-w-96 mt-2 hover:bg-slate-950/20"
 		>
 			<div className="flex space-x-4">
 				<Icon name={project.icon} color={project.color} size={6} className="mt-1" />

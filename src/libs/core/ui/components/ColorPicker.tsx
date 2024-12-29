@@ -21,7 +21,7 @@ const SIZES = {
 export const ColorPicker = ({ value, onChange, size = 'md', showLabel }: ColorPickerProps) => {
   return (
     <div>
-      {showLabel && <Text>Color</Text>}
+      {showLabel && <Text.Label>Color</Text.Label>}
 
       <Menu>
         <MenuButton className="border border-white/50 hover:border-white hover:bg-white/5 rounded-md leading-3 focus:outline-none focus:outline-blue-500 focus:outline-4 focus:outline-offset-0">

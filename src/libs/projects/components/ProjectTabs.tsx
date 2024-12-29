@@ -1,30 +1,30 @@
+'use client';
+
 import React from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import cn from 'classnames';
 import { motion } from 'framer-motion';
 import { Icon } from '@/core/ui';
 import { useProjects, type Project } from '@/projects';
 
-interface ProjectTabsProps {
-  project?: Project;
-  setProject: (project: Project) => void;
-}
-
-export const ProjectTabs = ({ project, setProject }: ProjectTabsProps) => {
+export const ProjectTabs = () => {
   const { list: projects } = useProjects();
+  const router = useRouter();
+  const { id } = useParams();
 
   return (
-    <div className="flex space-x-2 px-4 overflow-x-hidden no-scrollbar">
+    <div className="flex space-x-2 overflow-x-hidden no-scrollbar">
       {projects.map((p: Project) => (
         <button
           key={p.id}
           type="button"
-          onClick={() => { setProject(p) }}
+          onClick={() => { router.push(`./${p.id}`); }}
           className={cn(
             'relative px-4 py-1.5 text-sm min-w-[78px] rounded-full border border-transparent shrink-0 flex items-center',
-            p.id === project?.id ? '' : `hover:text-slate-300 hover:border-${p.color}-500/50`
+            p.id === id ? '' : `hover:text-slate-300 hover:border-${p.color}-500/50`
           )}
         >
-          {p.id === project?.id && (
+          {p.id === id && (
             <motion.span
               layoutId="bubble"
               className={cn(

@@ -10,14 +10,15 @@ interface ItemRealtimeActionsPreviewProps<T extends Data> {
 
 export const ItemRealtimeActionsPreview = <T extends Data>({ itemActions, isDragging }: ItemRealtimeActionsPreviewProps<T>) => {
 	const { viewers, editors, mover } = itemActions;
+	const viewersNotEditing = viewers.filter((v) => !editors.find((e) => e.userId === v.userId));
 
 	return (
 		<div className="flex space-x-4">
-			{viewers.length > 0 && (
+			{viewersNotEditing.length > 0 && (
 				<div className="flex items-center space-x-1">
 					<Icon.Eye className="text-blue-400/50" size={4} />
 					<ProfilePicList
-						users={viewers.map((viewer) => viewer.userId)}
+						users={viewersNotEditing.map((u) => u.userId)}
 						size="sm"
 						showTooltip
 					/>
@@ -27,7 +28,7 @@ export const ItemRealtimeActionsPreview = <T extends Data>({ itemActions, isDrag
 				<div className="flex items-center space-x-1">
 					<Icon.Pencil className="text-green-400/50" size={4} />
 					<ProfilePicList
-						users={editors.map((viewer) => viewer.userId)}
+						users={editors.map((u) => u.userId)}
 						size="sm"
 						showTooltip
 					/>

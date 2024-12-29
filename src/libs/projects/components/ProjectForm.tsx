@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TitleForm, Textarea, IconPicker, ColorPicker, type IconName, type ColorName } from '@/core/ui';
+import React, { useState, useEffect } from 'react';
+import { TitleForm, Textarea, IconPicker, ColorPicker, Text, type IconName, type ColorName } from '@/core/ui';
 import { useProject, type Project } from '@/projects';
 
 interface ProjectFormProps {
@@ -11,6 +11,21 @@ export const ProjectForm = ({ project }: ProjectFormProps) => {
 	const [icon, setIcon] = useState<IconName>();
 	const [color, setColor] = useState<ColorName>();
 
+	useEffect(() => {
+		projectActions.view();
+		const unload = () => {
+			projectActions.unview();
+		};
+		return unload;
+	}, []);
+
+	useEffect(() => {
+		if (project) {
+			setIcon(project.icon);
+			setColor(project.color);
+		}
+	}, [project]);
+
 	const handleIconChange = (value: IconName) => {
 		setIcon(value);
 		projectActions.update({ icon: value });
@@ -19,6 +34,15 @@ export const ProjectForm = ({ project }: ProjectFormProps) => {
 	const handleColorChange = (value: ColorName) => {
 		setColor(value);
 		projectActions.update({ color: value });
+	}
+
+	if (!projectActions.item && !projectActions.isLoading) {
+		return (
+			<>
+				<Text.H2>ERROR</Text.H2>
+				<Text>Project not found. Maybe it was deleted by someone else.</Text>
+			</>
+		);
 	}
 
 	return (

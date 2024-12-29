@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Text } from '@/core/ui';
 import { useUser, ProfilePic, type User } from '@/users';
+import { RealtimeActionPreview } from '@/activityLog';
 
 interface UserProps {
 	user: User;
@@ -13,10 +14,21 @@ export const UserCard = ({ user }: UserProps) => {
 		<Card
 			item={user}
 			itemActions={userActions}
-			className={`mt-2 px-3 py-1 flex items-center space-x-2 cursor-default rounded hover:bg-slate-900/30 group ${user.isOnline ? '' : 'opacity-70'}`}
+			className={`${user.isOnline ? '' : 'opacity-70'}`}
+			showRealtimeActions={false}
 		>
-			<ProfilePic user={user} size="lg" showStatus />
-			<Text className="flex-1">{user.name}</Text>
+			<div className="flex items-center space-x-2">
+				<ProfilePic user={user} size="lg" showStatus />
+				<Text className="flex-1">{user.name}</Text>
+			</div>
+
+			{user.isOnline && (
+				<div className="ml-4 flex flex-col space-y-2 mt-2">
+					{user.viewing && <RealtimeActionPreview action={user.viewing} />}
+					{user.editing && <RealtimeActionPreview action={user.editing} />}
+					{user.moving && <RealtimeActionPreview action={user.moving} />}
+				</div>
+			)}
 		</Card>
 	);
 };

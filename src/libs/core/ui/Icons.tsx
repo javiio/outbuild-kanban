@@ -30,7 +30,7 @@ export type IconName = keyof typeof Icons;
 
 export const Icons = {
   Sales: 'Sales',
-  Gamging: 'Gaming',
+  Gaming: 'Gaming',
   Sports: 'Sports',
   Board: 'Board',
   Checkbox: 'Checkbox',
@@ -59,7 +59,7 @@ export const Icons = {
 
 export const IconsMap = {
   [Icons.Sales]: Ri.RiFundsBoxLine,
-  [Icons.Gamging]: Md.MdSportsEsports,
+  [Icons.Gaming]: Md.MdSportsEsports,
   [Icons.Sports]: Md.MdSportsFootball,
   [Icons.Board]: Fa.FaTrello,
   [Icons.Checkbox]: Fi.FiCheckSquare,

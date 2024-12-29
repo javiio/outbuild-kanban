@@ -44,7 +44,7 @@ const MARGIN = {
 export const IconPicker = ({ value, onChange, size = 'md', showLabel }: IconPickerProps) => {
   return (
     <div>
-      {showLabel && <Text>Icon</Text>}
+      {showLabel && <Text.Label>Icon</Text.Label>}
 
       <Menu>
         <MenuButton className="border border-white/50 hover:border-white hover:bg-white/5 rounded-md leading-3 focus:outline-none focus:outline-blue-500 focus:outline-4 focus:outline-offset-0">

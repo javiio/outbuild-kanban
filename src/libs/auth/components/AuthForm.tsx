@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Input, Button, Logo, Text } from '@/core/ui';
 import { useAuth } from '@/auth';
-import { Input, Button, Logo } from '@/core/ui';
 
 enum AuthMode {
   Login = 'login',
@@ -27,14 +27,14 @@ export const AuthForm = () => {
 
   return (
     <div className="w-96">
-      <div className="m-8">
+      <div className="my-6 mx-20">
         <Logo />
       </div>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-6 bg-white/5 px-4 py-12 rounded">
           {mode === AuthMode.Signup && (
             <div>
-              <span>Name</span>
+              <Text.Label>Name</Text.Label>
               <Input
                 variant='secondary'
                 value={name}
@@ -43,7 +43,7 @@ export const AuthForm = () => {
             </div>
           )}
           <div>
-            <span>Email</span>
+            <Text.Label>Email</Text.Label>
             <Input
               variant='secondary'
               type="email"
@@ -53,7 +53,7 @@ export const AuthForm = () => {
             />
           </div>
           <div>
-            <span>Password</span>
+            <Text.Label>Password</Text.Label>
             <Input
               variant='secondary'
               type="password"
@@ -67,9 +67,9 @@ export const AuthForm = () => {
           </Button>
 
           <div className="flex space-x-2 items-center justify-center">
-            <span>
+            <Text.P>
               {mode === AuthMode.Login ? 'Don\'t have an account?' : 'Already have an account?'}
-            </span>
+            </Text.P>
             <Button
               onClick={() => setMode(mode === AuthMode.Login ? AuthMode.Signup : AuthMode.Login)}
               variant="link"

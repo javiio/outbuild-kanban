@@ -1,6 +1,6 @@
-import type { Data } from '@/core/data';
+import type { DataWithDescription } from '@/core/data';
 
-export interface Task extends Data {
+export interface Task extends DataWithDescription {
 	description: string;
 	projectId: string;
 	listId: string;

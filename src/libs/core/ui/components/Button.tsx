@@ -29,11 +29,11 @@ export const Button = ({
     size === 'xs' && 'text-xs py-0.5 px-2',
     size === 'sm' && 'text-sm py-1 px-3',
     size === 'md' && 'text-md py-2.5 px-5',
-    variant === 'primary' && !disabled && 'bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br',
+    variant === 'primary' && 'bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br',
     variant === 'clear' && 'border border-white focus:ring-white/90',
     variant === 'link' && 'text-blue-500 hover:underline',
     theme === 'light' && '!text-slate-900 !border-slate-900',
-    disabled && 'bg-gray-400',
+    disabled && 'opacity-80 text-gray-300 cursor-not-allowed',
     className && className
   );
 

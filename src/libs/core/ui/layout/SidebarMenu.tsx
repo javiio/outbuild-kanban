@@ -3,14 +3,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import cn from 'classnames';
 import { useAuth } from '@/auth';
+import { useProjects } from '@/projects';
 import { IconButton, Icon, Icons, type IconName } from '@/core/ui';
 
 export const SidebarMenu = () => {
+  const { list: projects } = useProjects();
   const { logout } = useAuth();
   const pathname = usePathname();
 
   const navItems = [
-    { name: 'Tasks', href: '/', icon: Icons.Board },
+    { name: 'Boards', href: `/board/${projects[0].id || ''}`, icon: Icons.Board },
     { name: 'Projects', href: '/projects', icon: Icons.Projects },
   ];
 
@@ -30,11 +32,11 @@ export const SidebarMenu = () => {
                 size={6}
                 className={cn(
                   'p-0 hover:!bg-transparent hover:text-green-400',
-                  pathname === href ? 'text-green-400' : ''
+                  pathname.substring(1).startsWith(href.split('/')[1]) ? 'text-green-400' : ''
                 )}
                 iconClassName={cn(
                   'transition-all duration-300',
-                  pathname !== href ? 'hover:w-7 hover:h-7 ' : ''
+                  pathname.substring(1).startsWith(href.split('/')[1]) ? 'hover:w-7 hover:h-7 ' : ''
                 )}
               />
             </Link>
@@ -43,7 +45,7 @@ export const SidebarMenu = () => {
       </div>
 
       <IconButton.Logout
-        className="absolute bottom-6 left-2.5"
+        className="absolute bottom-12 left-2.5"
         size={6}
         onClick={logout}
       />

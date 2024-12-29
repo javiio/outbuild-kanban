@@ -8,6 +8,10 @@ export interface Data {
   createdAt?: Timestamp;
 }
 
+export interface DataWithDescription extends Data {
+	description: string;
+}
+
 export enum ActionType {
   View = 'view',
   Edit = 'edit',
@@ -48,6 +52,7 @@ export interface ItemActions<T extends Data> {
   editors: RealtimeAction[];
   mover?: RealtimeAction | null;
 	view: () => Promise<void>;
+	unview: () => Promise<void>;
   startEditing: (field: string) => Promise<void>;
   finishEditing: () => Promise<void>;
   startMoving: () => Promise<void>;

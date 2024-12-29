@@ -16,8 +16,10 @@ export * from './components/loader/PageLoader';
 export * from './components/logo/Isologo';
 export * from './components/logo/Logo';
 export * from './layout/AppLayout'
+export * from './layout/FormPanel';
 export * from './layout/GeneratedStyles'
 export * from './layout/Page';
+export * from './layout/PageHeader';
 export * from './layout/Providers';
 export * from './layout/SidebarMenu';
 export * from './Icons';

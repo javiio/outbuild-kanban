@@ -1,5 +1,6 @@
 import { ActionType } from '@/core/data';
-import { Icons, Colors } from '@/core/ui';
+import { Icons } from '@/core/ui/Icons';
+import { Colors } from '@/core/ui/Colors';
 
 export const ActionTypeData = {
   [ActionType.View]: { name: 'viewing', icon: Icons.Eye, color: Colors.blue },

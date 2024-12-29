@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { ProjectCard, useProjects } from '@/projects';
 
@@ -6,9 +8,7 @@ export const ProjectList = () => {
 		
 	return (
 		<>
-			{list.map((project) => (
-				<ProjectCard key={project.id} project={project} />
-			))}
+			{list.map((project) => <ProjectCard key={project.id} project={project} />)}
 		</>
 	);
 };

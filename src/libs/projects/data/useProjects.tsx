@@ -1,4 +1,3 @@
-'use client';
 import React, {
   useContext,
   createContext,
@@ -14,12 +13,8 @@ const ProjectContext = createContext<ProjectContextProps>(defaultCollectionConte
 export const ProvideProjects = ({ children }: { children: ReactNode }) => {
   const collection = useCollection<Project>('projects');
 
-  const value = {
-    ...collection,
-  }
-
   return (
-    <ProjectContext.Provider value={value}>
+    <ProjectContext.Provider value={collection}>
       {children}
     </ProjectContext.Provider>
   );

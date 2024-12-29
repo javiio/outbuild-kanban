@@ -1,12 +1,9 @@
-'use client';
-
-// import { ProvideData } from '@/core/data';
-import { AuthRedirect } from '@/auth';
-import { Providers, AppLayout } from "@/core/ui";
+import { Providers } from '@/core/ui/layout/Providers';
+import { AppLayout } from '@/core/ui/layout/AppLayout';
 
 import "./globals.css";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -14,18 +11,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>Outbuild | Kanban</title>
+        <title>Outbuild Kanban</title>
       </head>
       <body>
-        {/* <ProvideData> */}
-          <AuthRedirect>
-            <Providers>
-              <AppLayout>
-                {children}
-              </AppLayout>
-            </Providers>
-          </AuthRedirect>
-        {/* </ProvideData> */}
+        <Providers>
+          <AppLayout>
+            {children}
+          </AppLayout>
+        </Providers>
       </body>
     </html>
   );

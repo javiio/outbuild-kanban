@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import { debounce } from 'lodash';
-import { ActionType, type ItemActions, type Data } from '@/core/data';
-import { ProfilePic, useUsers } from '@/users';
+import { ActionType, type ItemActions, type DataWithDescription } from '@/core/data';
+import { useAuth } from '@/auth';
+import { ProfilePic } from '@/users';
 
-const DEBOUNCE_TIMEOUT = 1000;
+const DEBOUNCE_TIMEOUT = 900;
 
-type TextareData = Data & {
-  description: string;
-  [key: string]: string;
-}
 
-interface TextareaProps<T extends TextareData> extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextareaProps<T extends DataWithDescription> extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   itemActions: ItemActions<T>;
-  field?: keyof TextareData;
+  field?: 'description';
 }
 
-export const Textarea = <T extends Data>({ itemActions, field = 'description', placeholder, className, ...props }: TextareaProps<T>) => {
+export const Textarea = <T extends DataWithDescription>({
+  itemActions,
+  field = 'description',
+  placeholder,
+  className,
+  ...props
+}: TextareaProps<T>) => {
   const { item, update, startEditing, finishEditing, editors } = itemActions;
-  const [value, setValue] = useState(item && item[field as keyof keyof TextareData] || '');
-  const { selected: currentUser } = useUsers();
+  const [value, setValue] = useState(item && item[field] || '');
+  const { currentUser } = useAuth();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Escape') {
