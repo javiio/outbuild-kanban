@@ -1,4 +1,4 @@
-import { ActionType } from '@/core/data';
+import { ActionType } from '@/core/data/types';
 import { Icons } from '@/core/ui/Icons';
 import { Colors } from '@/core/ui/Colors';
 

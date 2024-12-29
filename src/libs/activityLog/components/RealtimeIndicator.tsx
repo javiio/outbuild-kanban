@@ -1,7 +1,7 @@
 import React from 'react';
-import type { ActionType } from '@/core/data';
-import { Icon } from '@/core/ui';
-import { ActionTypeData } from '@/activityLog';
+import type { ActionType } from '@/core/data/types';
+import { Icon } from '@/core/ui/components/Icon';
+import { ActionTypeData } from '@/activityLog/data/types';
 
 interface RealtimeIndicatorProps {
 	actionType: ActionType;
